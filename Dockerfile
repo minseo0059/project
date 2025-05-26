@@ -4,10 +4,16 @@ RUN apt-get update && apt-get install -y \
     default-mysql-client \
     python3-pip \
     python3-venv \
-    pipx \
+    python3-distutils \
+    curl \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN pipx install awscli
+RUN python3 -m pip install --upgrade pip && \
+    python3 -m pip install pipx && \
+    python3 -m pipx ensurepath && \
+    pipx install awscli
+
+ENV PATH="/root/.local/bin:$PATH"
 
 COPY config.php /var/www/html/config/config.php
 
