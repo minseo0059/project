@@ -31,7 +31,7 @@ jobs:
 
       # 4. (선택) 이미지 푸시
       - name: Push Docker image to registry
-        if: secrets.REGISTRY_USERNAME != ''
+        if: ${{ secrets.REGISTRY_USERNAME }}
         run: |
           echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin myregistry.example.com
           docker tag nextcloud-s3:${{ github.sha }} parkkyungin/nextcloud:${{ github.sha }}
