@@ -10,6 +10,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4  # 1. 코드 가져오기
 
+    - name: Debug Secrets
+      run: |
+        echo "RDS_HOST: ${{ secrets.RDS_HOST }}"
+        echo "RDS_USER: ${{ secrets.RDS_USERNAME }}"
+        # 비밀번호는 로그에 출력되지 않음
+      env:
+        RDS_HOST: ${{ secrets.RDS_HOST }}
+        RDS_USERNAME: ${{ secrets.RDS_USERNAME }}
+
     - name: Test MySQL Connection
       run: |
         # 2. mysql-client 설치
