@@ -34,8 +34,8 @@ jobs:
         if: secrets.REGISTRY_USERNAME != ''
         run: |
           echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin myregistry.example.com
-          docker tag nextcloud-s3:${{ github.sha }} myregistry.example.com/nextcloud:${{ github.sha }}
-          docker push myregistry.example.com/nextcloud:${{ github.sha }}
+          docker tag nextcloud-s3:${{ github.sha }} parkkyungin/nextcloud:${{ github.sha }}
+          docker push parkkyungin/nextcloud:${{ github.sha }}
 
       # 5. 쿠버네티스에 배포
       - name: Deploy to Kubernetes
