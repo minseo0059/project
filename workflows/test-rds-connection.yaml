@@ -1,0 +1,22 @@
+name: Test RDS Connection
+
+on: [push]  # 코드 푸시 시 실행
+
+jobs:
+  test-rds:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4  # 1. 코드 가져오기
+
+    - name: Test MySQL Connection
+      run: |
+        # 2. mysql-client 설치
+        sudo apt-get update && sudo apt-get install -y mysql-client
+
+        # 3. RDS 연결 테스트 (간단한 쿼리 실행)
+        mysql -h ${{ secrets.RDS_HOST }} \
+              -u ${{ secrets.RDS_USERNAME }} \
+              -p${{ secrets.RDS_PASSWORD }} \
+              -e "SHOW DATABASES;"
