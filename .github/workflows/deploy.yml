@@ -43,6 +43,10 @@ jobs:
               mysql -h "$RDS_HOST" -u "$RDS_USERNAME" -p"$RDS_PASSWORD" -e "SHOW DATABASES;" && \
               aws s3 ls "s3://$S3_BUCKET" || aws s3 mb "s3://$S3_BUCKET" --region $AWS_REGION
             '
+      - name: Set up kubeconfig
+        run: |
+          mkdir -p ~/.kube 
+          echo "${{ secrets.KUBECONFIG_B64 }}" | base64 --decode > ~/.kube/config
 
 
       ## 4. Nextcloud 설치
