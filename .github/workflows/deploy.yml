@@ -1,4 +1,4 @@
-name: Deploy Nextcloud (RDS + S3)
+name: Deploy Nextcloud to Kubernetes
 
 on:
   push:
@@ -12,27 +12,32 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      # 1. 코드 체크아웃
+      # 1. 레포지토리 체크아웃
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Docker 빌드
+      # 2. Docker 이미지 빌드
       - name: Build Docker image
         run: |
-          docker build \
-            --tag nextcloud-s3:${{ github.sha }} \
-            .
+          docker build -t nextcloud-s3:${{ github.sha }} .
+
+      # 3. kubeconfig 셋업
       - name: Set up kubeconfig
         run: |
-          mkdir -p ~/.kube 
+          mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG_B64 }}" | base64 --decode > ~/.kube/config
-      - name: Push image to registry (옵션, 쿠버네티스에서 쓸려면)
+
+      # 4. (선택) 이미지 푸시
+      - name: Push Docker image to registry
+        if: secrets.REGISTRY_USERNAME != ''
         run: |
           echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin myregistry.example.com
           docker tag nextcloud-s3:${{ github.sha }} myregistry.example.com/nextcloud:${{ github.sha }}
           docker push myregistry.example.com/nextcloud:${{ github.sha }}
 
+      # 5. 쿠버네티스에 배포
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/deployment.yaml
