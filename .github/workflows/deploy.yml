@@ -37,9 +37,12 @@ jobs:
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
             nextcloud-s3:${{ github.sha }} \
-            bash -c "apt-get update && \
-                     mysql -h $RDS_HOST -u $RDS_USERNAME -p$RDS_PASSWORD -e 'SHOW DATABASES;' && \
-                     aws s3 ls s3://$S3_BUCKET || aws s3 mb s3://$S3_BUCKET --region ${{ env.AWS_REGION }}"
+            bash -c '
+              apt-get update && \
+              mysql -h "$RDS_HOST" -u "$RDS_USERNAME" -p"$RDS_PASSWORD" -e "SHOW DATABASES;" && \
+              aws s3 ls "s3://$S3_BUCKET" || aws s3 mb "s3://$S3_BUCKET" --region $AWS_REGION
+            '
+
 
       # 4. Nextcloud 설치
       - name: Install Nextcloud
