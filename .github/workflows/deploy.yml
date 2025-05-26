@@ -1,0 +1,9 @@
+name: Deploy Nextcloud
+
+on:
+  push:
+    branches: [ main ]  # main 브랜치에 푸시 시 실행
+  workflow_dispatch:    # 수동 실행 허용
+
+env:
+  NEXTCLOUD_VERSION: "31.0.5.1"  # 사용할 Nextcloud 버전
