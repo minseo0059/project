@@ -14,6 +14,6 @@ RUN mkdir -p /var/www/html/data && \
     echo "# Nextcloud data directory" > /var/www/html/data/.ncdata && \
     chown www-data:www-data /var/www/html/data/.ncdata && \
     chmod 640 /var/www/html/data/.ncdata && \
-    chmod -R 770 /var/www/html/data
+    chmod -R 770 /var/www/html/data && \
     chmod 640 /var/www/html/config/config.php && \
     chown www-data:root /var/www/html/config/config.php
