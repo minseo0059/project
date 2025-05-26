@@ -1,9 +1,11 @@
 FROM nextcloud:latest
 
 RUN apt-get update && apt-get install -y \
-    mysql-client \
-    awscli \
+    default-mysql-client \
+    python3-pip \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install awscli
 
 COPY config.php /var/www/html/config/config.php
 
