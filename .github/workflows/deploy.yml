@@ -22,32 +22,41 @@ jobs:
         run: |
           docker build \
             --tag nextcloud-s3:${{ github.sha }} \
-            --build-arg NEXTCLOUD_VERSION=${{ env.NEXTCLOUD_VERSION }} \
             .
-
-      # 3. RDS/S3 연결 테스트
-      - name: Verify infrastructure
-        run: |
-          docker run --rm \
-            -e RDS_HOST=${{ secrets.RDS_HOST }} \
-            -e RDS_DB_NAME=${{ secrets.RDS_DB_NAME }} \
-            -e RDS_USERNAME=${{ secrets.RDS_USERNAME }} \
-            -e RDS_PASSWORD=${{ secrets.RDS_PASSWORD }} \
-            -e S3_BUCKET=${{ secrets.S3_BUCKET }} \
-            -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -e AWS_REGION=${{ env.AWS_REGION }} \
-            nextcloud-s3:${{ github.sha }} \
-            bash -c '
-              apt-get update && \
-              mysql -h "$RDS_HOST" -u "$RDS_USERNAME" -p"$RDS_PASSWORD" -e "SHOW DATABASES;" && \
-              aws s3 ls "s3://$S3_BUCKET" || aws s3 mb "s3://$S3_BUCKET" --region $AWS_REGION
-            '
       - name: Set up kubeconfig
         run: |
           mkdir -p ~/.kube 
           echo "${{ secrets.KUBECONFIG_B64 }}" | base64 --decode > ~/.kube/config
+      - name: Push image to registry (옵션, 쿠버네티스에서 쓸려면)
+        run: |
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin myregistry.example.com
+          docker tag nextcloud-s3:${{ github.sha }} myregistry.example.com/nextcloud:${{ github.sha }}
+          docker push myregistry.example.com/nextcloud:${{ github.sha }}
 
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+
+          
+      ## 3. RDS/S3 연결 테스트
+      #- name: Verify infrastructure
+      #  run: |
+      #    docker run --rm \
+      #      -e RDS_HOST=${{ secrets.RDS_HOST }} \
+      #      -e RDS_DB_NAME=${{ secrets.RDS_DB_NAME }} \
+      #      -e RDS_USERNAME=${{ secrets.RDS_USERNAME }} \
+      #      -e RDS_PASSWORD=${{ secrets.RDS_PASSWORD }} \
+      #      -e S3_BUCKET=${{ secrets.S3_BUCKET }} \
+      #      -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+      #      -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+      #      -e AWS_REGION=${{ env.AWS_REGION }} \
+      #      nextcloud-s3:${{ github.sha }} \
+      #      bash -c '
+      #        apt-get update && \
+      #        mysql -h "$RDS_HOST" -u "$RDS_USERNAME" -p"$RDS_PASSWORD" -e "SHOW DATABASES;" && \
+      #        aws s3 ls "s3://$S3_BUCKET" || aws s3 mb "s3://$S3_BUCKET" --region $AWS_REGION
+      #      '
 
       ## 4. Nextcloud 설치
       #- name: Install Nextcloud
