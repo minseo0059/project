@@ -1,5 +1,9 @@
 FROM nextcloud:latest
 
+RUN apt-get update && apt-get install -y \
+    mysql-client \
+    awscli \
+
 COPY config.php /var/www/html/config/config.php
 
 RUN mkdir -p /var/www/html/data && \
