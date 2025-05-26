@@ -4,7 +4,8 @@ RUN apt-get update && apt-get install -y \
     mysql-client \
     awscli \
     libmagickcore-6.q16-6-extra \
-    && rm -rf /var/lib/apt/lists/*
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY config.php /var/www/html/config/config.php
 
@@ -16,4 +17,4 @@ RUN mkdir -p /var/www/html/data && \
     chmod 640 /var/www/html/data/.ncdata && \
     chmod -R 770 /var/www/html/data && \
     chmod 640 /var/www/html/config/config.php && \
-    chown www-data:root /var/www/html/config/config.php
+    chown www-data:www-data /var/www/html/config/config.php
