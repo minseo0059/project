@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextcloud
+  template:
+    metadata:
+      labels:
+        app: nextcloud
+    spec:
+      containers:
+        - name: nextcloud
+          image: parkkyungin/nextcloud:${GITHUB_SHA}
+          ports:
+            - containerPort: 80
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credentials
+                  key: access_key
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credentials
+                  key: secret_key
+            - name: S3_BUCKET
+              value: your-bucket-name
+            - name: RDS_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: rds-credentials
+                  key: db_name
+            - name: RDS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rds-credentials
+                  key: db_host
+            - name: RDS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rds-credentials
+                  key: db_user
+            - name: RDS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rds-credentials
+                  key: db_password
+          volumeMounts:
+            - name: nextcloud-data
+              mountPath: /var/www/html/data
+      volumes:
+        - name: nextcloud-data
+          emptyDir: {}  # or use PVC if you prefer
