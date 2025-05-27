@@ -50,7 +50,7 @@ jobs:
         run: |
           envsubst '${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY} ${RDS_DB_NAME} ${RDS_HOST} ${RDS_USERNAME} ${RDS_PASSWORD}' \
             < ./project/k8s/secret-template.yaml > ./project/k8s/secret.yaml
-          kubectl apply -f k8s/secret.yaml
+          kubectl apply -f ./project/k8s/secret.yaml
 
       - name: Deploy to Kubernetes
         run: |
