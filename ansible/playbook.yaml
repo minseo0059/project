@@ -1,0 +1,13 @@
+- name: Apply Kubernetes manifests
+  hosts: master
+  become: yes
+
+  tasks:
+    - name: Apply Secret
+      shell: kubectl apply -f /home/user1/project/k8s/secret.yaml
+
+    - name: Apply Service
+      shell: kubectl apply -f /home/user1/project/k8s/service.yaml
+
+    - name: Apply Deployment
+      shell: kubectl apply -f /home/user1/project/k8s/deployment.yaml
