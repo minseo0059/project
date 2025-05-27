@@ -50,6 +50,6 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
+          kubectl apply -f ./project/k8s/secret-tamplate.yaml
           kubectl apply -f ./project/k8s/deployment.yaml
           kubectl apply -f ./project/k8s/service.yaml
-          kubectl apply -f ./project/k8s/secret.yaml
