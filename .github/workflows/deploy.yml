@@ -20,12 +20,12 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t nextcloud-s3:${{ github.sha }} .
-          docker tag nextcloud-s3:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/nextcloud:${{ github.sha }}
+          docker tag nextcloud-s3:${{ github.sha }} ${{ secrets.REGISTRY_USERNAME }}/nextcloud:${{ github.sha }}
 
       - name: Log in and push to Docker Hub
         run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker push ${{ secrets.DOCKER_USERNAME }}/nextcloud:${{ github.sha }}
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+          docker push ${{ secrets.REGISTRY_USERNAME }}/nextcloud:${{ github.sha }}
 
       - name: Render and apply Kubernetes Secrets
         env:
