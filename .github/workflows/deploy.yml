@@ -24,10 +24,10 @@ jobs:
           docker build -t nextcloud-s3:${{ github.sha }} .
 
       # 3. kubeconfig 셋업
-      - name: Set up kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG_B64 }}" | base64 --decode > ~/.kube/config
+      #- name: Set up kubeconfig
+      #  run: |
+      #    mkdir -p ~/.kube
+      #    echo "${{ secrets.KUBECONFIG_B64 }}" | base64 --decode > ~/.kube/config
 
       # 4. (선택) 이미지 푸시
       - name: Push Docker image to registry
