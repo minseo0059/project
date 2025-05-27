@@ -1,7 +1,9 @@
 name: Test RDS Connection
 
-on: [push]  # 코드 푸시 시 실행
-
+on:
+  #push:
+  #  branches: [ main ]
+  workflow_dispatch:
 jobs:
   test-rds:
     runs-on: ubuntu-latest
