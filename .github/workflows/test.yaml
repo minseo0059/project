@@ -1,0 +1,5 @@
+jobs:
+  deploy:
+    runs-on: self-hosted  # 셀프 호스팅 Runner 지정
+    steps:
+      - run: kubectl get pods  # 이제 내부 리소스 접근 가능
