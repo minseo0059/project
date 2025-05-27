@@ -1,3 +1,13 @@
+name: Test Workflow
+
+on:
+  # 1. main 브랜치 푸시 시 실행
+  push:
+    branches: [ "main" ]
+  
+  # 2. 수동 실행 옵션
+  workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: self-hosted  # 셀프 호스팅 Runner 지정
