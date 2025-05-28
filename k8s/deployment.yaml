@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: nextcloud
-          image: parkkyungin/nextcloud:latest
+          image: parkkyungin/nextcloud:${GITHUB_SHA}
           ports:
             - containerPort: 80
           env:
