@@ -54,4 +54,4 @@ jobs:
             
       - name: Run Ansible Playbook
         run: |
-          ansible-playbook ~/project/ansible/playbook.yml
+          ansible-playbook ~/project/ansible/playbook.yaml
