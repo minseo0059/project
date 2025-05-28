@@ -36,8 +36,9 @@ jobs:
     steps:
       - name: Clone project repo
         run: |
-          rm -rf project  
-          git clone https://github.com/parkkyungin/project
+          rm -rf project
+          rm -rf ~/project
+          git clone https://github.com/parkkyungin/project ~/project
         
       - name: Render and apply Kubernetes Secrets
         env:
