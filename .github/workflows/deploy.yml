@@ -62,4 +62,4 @@ jobs:
 
       - name: Check Pod Status
         run: |
-          ansible master -m shell -a "kubectl get pod -A"
+          ansible master -m shell -a "kubectl get pod"
