@@ -4,13 +4,44 @@
 
   vars:
     project_dir: /home/user1/project
+    local_k8s_dir: ./files/k8s   # 컨트롤 노드에서의 로컬 경로
 
   tasks:
+    - name: Copy Secret
+      copy:
+        src: "{{ local_k8s_dir }}/secret.yaml"
+        dest: "{{ project_dir }}/k8s/secret.yaml"
+
     - name: Apply Secret
       shell: kubectl apply -f {{ project_dir }}/k8s/secret.yaml
+
+    - name: Delete Secret
+      file:
+        path: "{{ project_dir }}/k8s/secret.yaml"
+        state: absent
+
+    - name: Copy Service
+      copy:
+        src: "{{ local_k8s_dir }}/service.yaml"
+        dest: "{{ project_dir }}/k8s/service.yaml"
 
     - name: Apply Service
       shell: kubectl apply -f {{ project_dir }}/k8s/service.yaml
 
+    - name: Delete Service
+      file:
+        path: "{{ project_dir }}/k8s/service.yaml"
+        state: absent
+
+    - name: Copy Deployment
+      copy:
+        src: "{{ local_k8s_dir }}/deployment.yaml"
+        dest: "{{ project_dir }}/k8s/deployment.yaml"
+
     - name: Apply Deployment
       shell: kubectl apply -f {{ project_dir }}/k8s/deployment.yaml
+
+    - name: Delete Deployment
+      file:
+        path: "{{ project_dir }}/k8s/deployment.yaml"
+        state: absent
