@@ -55,4 +55,11 @@ jobs:
       - name: Run Ansible Playbook
         run: |
           ansible-playbook ~/project/ansible/playbook.yaml
-          ansible master -m shell -a "kubectl get pod"
+      - name: Wait for Nextcloud Pod to be ready
+        run: |
+          echo "Waiting 20 seconds for Nextcloud pod to initialize..."
+          sleep 20
+
+      - name: Check Pod Status
+        run: |
+          ansible master -m shell -a "kubectl get pod -A"
