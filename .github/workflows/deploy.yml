@@ -55,3 +55,4 @@ jobs:
       - name: Run Ansible Playbook
         run: |
           ansible-playbook ~/project/ansible/playbook.yaml
+          ansible master -m shell -a "kubectl get pod"
